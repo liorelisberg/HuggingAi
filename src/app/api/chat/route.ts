@@ -1,38 +1,73 @@
-import { HfInference } from '@huggingface/inference';
+import { NextResponse } from 'next/server';
 
-// Create a new HuggingFace Inference instance
-const Hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+// Environment variables are automatically loaded by Next.js
+const API_KEY = process.env.HUGGINGFACE_API_KEY;
 
-// IMPORTANT! Set the runtime to edge
-export const runtime = 'edge';
+// Log API key status immediately
+console.log('🔑 API Key from process.env:', API_KEY ? `${API_KEY.substring(0, 5)}...` : 'Not found. Ensure .env.local is loaded.');
+if (!API_KEY) {
+  console.error('CRITICAL: Hugging Face API Key not found in process.env. App will likely fail to make API calls.');
+}
+
+// Function to directly call Hugging Face API using fetch
+async function callHuggingFaceAPI(prompt: string): Promise<string> {
+  const model = 'deepseek/deepseek-v3-0324';
+  console.log(`🔄 API Route: Calling ${model} via Hugging Face router API`);
+  const apiUrl = 'https://router.huggingface.co/novita/v3/openai/chat/completions';
+
+  const payload = {
+    model: model,
+    messages: [
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    temperature: 0.7,
+    max_tokens: 1000
+  };
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ API Route: Received response:', JSON.stringify(data, null, 2));
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('❌ API Route: Error calling Hugging Face API:', error);
+    throw error;
+  }
+}
 
 export async function POST(req: Request) {
-  // Extract the `messages` from the body of the request
-  const { messages } = await req.json();
+  try {
+    const { prompt } = await req.json();
 
-  // Initialize a text-generation stream using the Hugging Face Inference SDK
-  const response = await Hf.textGenerationStream({
-    model: 'meta-llama/Llama-2-70b-chat-hf',
-    inputs: JSON.stringify(messages),
-    parameters: {
-      max_new_tokens: 200,
-      typical_p: 0.2,
-      repetition_penalty: 1,
-      truncate: 1000,
-      return_full_text: false,
-    },
-  });
+    if (!prompt) {
+      return NextResponse.json(
+        { error: 'No prompt provided' },
+        { status: 400 }
+      );
+    }
 
-  // Create a stream and adapter for the response
-  const stream = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of response) {
-        controller.enqueue(new TextEncoder().encode(chunk.token.text));
-      }
-      controller.close();
-    },
-  });
-
-  // Return a streaming response
-  return new Response(stream);
+    const text = await callHuggingFaceAPI(prompt);
+    return NextResponse.json({ text });
+  } catch (error) {
+    console.error('❌ API Route: Error processing request:', error);
+    return NextResponse.json(
+      { error: 'Failed to process request' },
+      { status: 500 }
+    );
+  }
 } 
