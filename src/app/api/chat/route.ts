@@ -81,7 +81,7 @@ export async function POST(req: Request) {
     `;
 
     prompt = promptEngineering + prompt;
-    
+
     const text = await callHuggingFaceAPI(prompt);
     return NextResponse.json({ text });
   } catch (error) {

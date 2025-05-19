@@ -54,7 +54,7 @@ export default function Chat() {
               message.role === 'user'
                 ? 'bg-blue-600 text-white rounded-br-none'
                 : 'bg-gray-700 text-gray-100 rounded-bl-none'
-            } shadow-lg prose prose-invert break-words whitespace-pre-wrap`}
+            } shadow-lg prose prose-invert break-words whitespace-pre-wrap overflow-hidden`}
           >
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
@@ -75,7 +75,7 @@ export default function Chat() {
                       {children}
                     </code>
                   ) : (
-                    <code className="block bg-gray-800 p-2 rounded overflow-x-auto" {...props}>
+                    <code className="block bg-gray-800 p-2 rounded overflow-x-auto scrollbar-hidden max-w-full" {...props}>
                       {children}
                     </code>
                   );
@@ -168,7 +168,7 @@ export default function Chat() {
       aria-label="Chat conversation"
     >
       <div 
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-y-auto scrollbar-hidden"
         role="log"
         aria-live="polite"
       >
@@ -183,7 +183,7 @@ export default function Chat() {
             ref={virtuosoRef}
             data={messages}
             itemContent={(index) => renderMessage(index)}
-            className="h-full px-2"
+            className="h-full px-2 scrollbar-hidden"
             followOutput="smooth"
             increaseViewportBy={{ top: 100, bottom: 100 }}
             style={{ height: '100%' }}
