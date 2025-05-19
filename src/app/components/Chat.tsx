@@ -45,14 +45,14 @@ export default function Chat() {
       >
         <div className="flex items-start gap-3">
           {message.role === 'assistant' && (
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-600 via-gray-500 to-blue-500 flex items-center justify-center text-white flex-shrink-0 animate-pulse-slow">
               AI
             </div>
           )}
           <div
-            className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+            className={`max-w-[90vw] sm:max-w-[85%] rounded-2xl px-4 py-3 ${
               message.role === 'user'
-                ? 'bg-blue-600 text-white rounded-br-none'
+                ? 'bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white rounded-br-none animate-pulse-slow'
                 : 'bg-gray-700 text-gray-100 rounded-bl-none'
             } shadow-lg prose prose-invert break-words whitespace-pre-wrap overflow-hidden`}
           >
@@ -90,7 +90,7 @@ export default function Chat() {
           </div>
           {message.role === 'user' && (
             <div className="flex items-center justify-center flex-shrink-0">
-              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-blue-400 bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold shadow-md text-xs sm:text-sm animate-fade-in">
+              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white font-bold shadow-md text-xs sm:text-sm animate-pulse-slow">
                 <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4 sm:h-5 sm:w-5 text-blue-200' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth='2'><path strokeLinecap='round' strokeLinejoin='round' d='M5.121 17.804A9 9 0 1112 21a8.963 8.963 0 01-6.879-3.196z' /><path strokeLinecap='round' strokeLinejoin='round' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' /></svg>
                 Me
               </span>
@@ -166,7 +166,7 @@ export default function Chat() {
 
   return (
     <div 
-      className="flex flex-col card overflow-hidden h-[calc(100vh-12rem)]"
+      className="flex flex-col overflow-hidden h-[calc(100vh-12rem)]"
       role="region"
       aria-label="Chat conversation"
     >
@@ -176,26 +176,39 @@ export default function Chat() {
         aria-live="polite"
       >
         {messages.length === 0 ? (
-          <div className="text-center text-gray-400 py-8 h-full flex flex-col items-center justify-center" role="status">
-            <div className="text-6xl mb-4 animate-pulse-glow" aria-hidden="true">👋</div>
-            <h2 className="text-xl mb-2 font-semibold">
-              <span className="text-gradient font-medium">Welcome! How can I help with your social media strategy?</span>
-            </h2>
-            <p className="text-sm">Ask me about content creation, audience growth, or engagement tactics!</p>
+          <div className="text-center py-12 h-full flex flex-col items-center justify-center" role="status">
+            <div className="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 p-8 rounded-3xl backdrop-blur-sm shadow-xl border border-blue-500/20 max-w-md">
+              <div className="text-7xl mb-6 animate-pulse-glow" aria-hidden="true">👋</div>
+              <h2 className="text-2xl mb-4 font-semibold">
+                <span className="text-gradient font-medium">Welcome! How can I help with your social media strategy?</span>
+              </h2>
+              <p className="text-blue-200 mb-3">Ask me about:</p>
+              <div className="flex flex-col gap-2 text-white">
+                <div className="flex items-center bg-blue-600/30 px-4 py-2 rounded-lg">
+                  <span className="mr-2">📈</span> Content creation
+                </div>
+                <div className="flex items-center bg-blue-600/30 px-4 py-2 rounded-lg">
+                  <span className="mr-2">🚀</span> Audience growth
+                </div>
+                <div className="flex items-center bg-blue-600/30 px-4 py-2 rounded-lg">
+                  <span className="mr-2">💬</span> Engagement tactics
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <Virtuoso
             ref={virtuosoRef}
             data={messages}
             itemContent={(index) => renderMessage(index)}
-            className="h-full px-2 scrollbar-hidden"
+            className="h-full px-2 scrollbar-hidden space-y-4"
             followOutput="smooth"
             increaseViewportBy={{ top: 100, bottom: 100 }}
             style={{ height: '100%' }}
             overscan={20}
             components={{
               Item: ({ children, ...props }) => (
-                <div {...props} className="py-1">
+                <div {...props} className="py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900" tabIndex={0}>
                   {children}
                 </div>
               ),
@@ -210,7 +223,7 @@ export default function Chat() {
             aria-label="Loading response"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-600 via-gray-500 to-blue-500 flex items-center justify-center text-white animate-pulse-slow">
                 AI
               </div>
               <div className="bg-gray-700 rounded-2xl px-4 py-3 rounded-bl-none">
@@ -227,26 +240,28 @@ export default function Chat() {
       
       <form 
         onSubmit={handleSubmit} 
-        className="border-t border-gray-700 p-4 glass"
+        className="p-4"
         role="form"
         aria-label="Message input form"
       >
-        <div className="flex gap-4">
+        <div className="flex gap-4 p-1 rounded-2xl">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about social media growth strategies..."
-            className="flex-1 px-4 py-2 rounded-full bg-gray-700 text-gray-100 border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 placeholder-gray-400"
+            className="flex-1 px-4 py-2.5 rounded-full bg-gray-700/80 text-gray-100 border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 placeholder-gray-400"
             disabled={isLoading}
             aria-label="Message input"
+            tabIndex={0}
             role="textbox"
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            className="px-6 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white rounded-full hover:opacity-90 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md animate-pulse-slow"
             aria-label={isLoading ? "Sending message..." : "Send message"}
+            tabIndex={0}
           >
             Send
           </button>
