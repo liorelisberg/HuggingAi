@@ -22,7 +22,7 @@ export default function Home() {
       />
 
       {/* Content Layer */}
-      <div className="relative z-10 max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="relative z-10 w-[95%] max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <header className="text-center mb-8">
           <div className="flex justify-center mb-2">
             <Logo />
@@ -31,7 +31,9 @@ export default function Home() {
             Your expert companion for social media growth and strategy
           </p>
         </header>
-        <Chat />
+        <div className="px-0">
+          <Chat />
+        </div>
       </div>
     </div>
   );
