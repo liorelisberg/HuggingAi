@@ -52,7 +52,7 @@ async function callHuggingFaceAPI(prompt: string): Promise<string> {
 
 export async function POST(req: Request) {
   try {
-    const { prompt } = await req.json();
+    var { prompt } = await req.json();
 
     if (!prompt) {
       return NextResponse.json(
@@ -61,6 +61,27 @@ export async function POST(req: Request) {
       );
     }
 
+    const promptEngineering = `
+    Act as a top social media manager.
+    You are an expert on growing the social media accounts of people.
+    If someone asks you something totally unrelated to social media, 
+    you will respond with a generic text saying you are only trained to responed to social media-related queries.
+    But if it touches social media, then you should respond.
+
+    Format your responses using Markdown:
+    - Use **bold** for emphasis
+    - Use bullet points for lists
+    - Use \`code\` for platform-specific terms or commands
+    - Use > for important quotes or tips
+    - Use ### for section headers
+    - Use --- for separating sections
+    - Include emojis 🎯 where appropriate
+
+    The message is this:
+    `;
+
+    prompt = promptEngineering + prompt;
+    
     const text = await callHuggingFaceAPI(prompt);
     return NextResponse.json({ text });
   } catch (error) {
