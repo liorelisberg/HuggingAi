@@ -39,7 +39,7 @@ export default function Chat() {
       <div
         className={`flex ${
           message.role === 'user' ? 'justify-end' : 'justify-start'
-        } animate-fade-in px-4 mb-6`}
+        } animate-fade-in px-2 sm:px-4 mb-6`}
         role="article"
         aria-label={`${message.role} message`}
       >
@@ -89,8 +89,11 @@ export default function Chat() {
             </ReactMarkdown>
           </div>
           {message.role === 'user' && (
-            <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white flex-shrink-0">
-              You
+            <div className="flex items-center justify-center flex-shrink-0">
+              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-blue-400 bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold shadow-md text-xs sm:text-sm animate-fade-in">
+                <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4 sm:h-5 sm:w-5 text-blue-200' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth='2'><path strokeLinecap='round' strokeLinejoin='round' d='M5.121 17.804A9 9 0 1112 21a8.963 8.963 0 01-6.879-3.196z' /><path strokeLinecap='round' strokeLinejoin='round' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' /></svg>
+                Me
+              </span>
             </div>
           )}
         </div>
@@ -234,7 +237,7 @@ export default function Chat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about social media growth strategies..."
-            className="flex-1 px-4 py-2 rounded-full bg-gray-700 text-gray-100 border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-gray-400"
+            className="flex-1 px-4 py-2 rounded-full bg-gray-700 text-gray-100 border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 placeholder-gray-400"
             disabled={isLoading}
             aria-label="Message input"
             role="textbox"
