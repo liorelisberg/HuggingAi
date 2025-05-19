@@ -52,7 +52,7 @@ async function callHuggingFaceAPI(prompt: string): Promise<string> {
 
 export async function POST(req: Request) {
   try {
-    var { prompt } = await req.json();
+    let { prompt } = await req.json();
 
     if (!prompt) {
       return NextResponse.json(

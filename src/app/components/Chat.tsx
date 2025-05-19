@@ -20,7 +20,7 @@ export default function Chat() {
   // Debounced scroll handler
   const scrollToBottom = useCallback(() => {
     if (virtuosoRef.current) {
-      (virtuosoRef.current as any).scrollToIndex({
+      (virtuosoRef.current as unknown as { scrollToIndex: (opts: { index: number; behavior: string }) => void }).scrollToIndex({
         index: messages.length - 1,
         behavior: 'smooth',
       });
@@ -59,7 +59,7 @@ export default function Chat() {
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
-                a: ({ node, ...props }) => (
+                a: (props: React.HTMLProps<HTMLAnchorElement>) => (
                   <a 
                     {...props} 
                     target="_blank" 
@@ -67,7 +67,7 @@ export default function Chat() {
                     className="text-blue-300 hover:text-blue-200 underline"
                   />
                 ),
-                code: ({ node, className, children, ...props }: any) => {
+                code: ({ className, children, ...props }: React.HTMLProps<HTMLElement>) => {
                   const match = /language-(\w+)/.exec(className || '');
                   const isInline = !match;
                   return isInline ? (
@@ -80,7 +80,7 @@ export default function Chat() {
                     </code>
                   );
                 },
-                p: ({ children }) => (
+                p: ({ children }: React.HTMLProps<HTMLParagraphElement>) => (
                   <p className="mb-2 last:mb-0">{children}</p>
                 )
               }}
