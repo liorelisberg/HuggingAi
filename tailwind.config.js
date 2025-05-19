@@ -32,12 +32,21 @@ module.exports = {
         'text-shimmer': {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' }
+        },
+        'pulse-slow': {
+          '0%, 100%': {
+            transform: 'scale(1)'
+          },
+          '50%': {
+            transform: 'scale(1.03)'
+          }
         }
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease-out forwards',
         'pulse-glow': 'pulse-glow 2s infinite',
-        'text-shimmer': 'text-shimmer 3s ease-in-out infinite'
+        'text-shimmer': 'text-shimmer 3s ease-in-out infinite',
+        'pulse-slow': 'pulse-slow 2.5s ease-in-out infinite'
       },
       typography: {
         DEFAULT: {
