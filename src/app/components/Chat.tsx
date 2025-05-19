@@ -163,7 +163,7 @@ export default function Chat() {
 
   return (
     <div 
-      className="flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden h-[calc(100vh-12rem)]"
+      className="flex flex-col card overflow-hidden h-[calc(100vh-12rem)]"
       role="region"
       aria-label="Chat conversation"
     >
@@ -174,8 +174,10 @@ export default function Chat() {
       >
         {messages.length === 0 ? (
           <div className="text-center text-gray-400 py-8 h-full flex flex-col items-center justify-center" role="status">
-            <div className="text-6xl mb-4" aria-hidden="true">👋</div>
-            <p className="text-lg mb-2">Welcome! How can I help with your social media strategy?</p>
+            <div className="text-6xl mb-4 animate-pulse-glow" aria-hidden="true">👋</div>
+            <h2 className="text-xl mb-2 font-semibold">
+              <span className="text-gradient font-medium">Welcome! How can I help with your social media strategy?</span>
+            </h2>
             <p className="text-sm">Ask me about content creation, audience growth, or engagement tactics!</p>
           </div>
         ) : (
@@ -222,7 +224,7 @@ export default function Chat() {
       
       <form 
         onSubmit={handleSubmit} 
-        className="border-t border-gray-700 p-4 bg-gray-800"
+        className="border-t border-gray-700 p-4 glass"
         role="form"
         aria-label="Message input form"
       >
@@ -240,7 +242,7 @@ export default function Chat() {
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             aria-label={isLoading ? "Sending message..." : "Send message"}
           >
             Send
